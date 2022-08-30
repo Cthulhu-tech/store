@@ -2,6 +2,7 @@ package auth
 
 import (
 	"net/http"
+	"encoding/json"
 	
 	"github.com/labstack/echo/v4"
 
@@ -9,6 +10,16 @@ import (
 )
 
 func Login(c echo.Context) error {
+
+	json_map := make(map[string]interface{})
+
+	err := json.NewDecoder(c.Request().Body).Decode(&json_map)
+
+	if err != nil {
+		
+		return err
+
+	}
 
 	return c.String(http.StatusOK, "login")
 
