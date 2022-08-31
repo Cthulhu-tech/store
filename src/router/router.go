@@ -4,6 +4,8 @@ import (
 	"github.com/labstack/echo/v4"
 
 	"github.com/Cthulhu-tech/store/src/api/auth"
+	middlewares "github.com/Cthulhu-tech/store/src/middleware"
+	"github.com/Cthulhu-tech/store/src/utils/database"
 )
 
 func Handler() {
@@ -11,6 +13,8 @@ func Handler() {
 	router := echo.New()
 
 	check := router.Group("/", middlewares.Auth)
+
+	database.Connecting()
 
 	router.GET("/login", auth.Login)
 	router.GET("/regist", auth.Regist)
