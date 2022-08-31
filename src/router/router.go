@@ -1,14 +1,10 @@
 package router
 
 import (
-
 	"github.com/labstack/echo/v4"
 
 	"github.com/Cthulhu-tech/store/src/api/auth"
-	"github.com/Cthulhu-tech/store/src/middleware"
-
 )
-
 
 func Handler() {
 
@@ -21,8 +17,8 @@ func Handler() {
 
 	router.GET("/auth", auth.Vkontakte)
 
-	check.GET("refresh", auth.Refresh)
-	check.GET("protected", auth.Protected)
+	check.GET("/refresh", auth.Refresh)
+	check.GET("/protected", auth.Protected)
 
 	router.Logger.Fatal(router.Start(":3000"))
 

@@ -7,6 +7,12 @@ type VK_DATA struct {
 	USER_ID int    `json:"user_id"`
 }
 
-type Error struct {
+type Message struct {
 	message string
+}
+
+type UserRegistration struct {
+	Login    string `json:"login"`
+	Password string `json:"password"`
+	Email    string `json:"email"`
 }

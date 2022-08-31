@@ -2,10 +2,11 @@ package auth
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"os"
-	"fmt"
+
 	"github.com/labstack/echo/v4"
 )
 
@@ -35,12 +36,24 @@ func Vkontakte(c echo.Context) error {
 
 		json.Unmarshal(body, &data)
 
+		if len(data.AT) == 0 || len(data.ID) == 0 || len(data.EXPIRES) == 0 || len(data.Email) == 0 {
+
+			return invalidQueryParam()
+
+		}
+
 		fmt.Println(data.AT, data.USER_ID, data.EXPIRES, data.EMAIL)
 
 		return c.Redirect(302, os.Getenv("URL_SERVER"))
 
 	}
 
-	return c.JSON(402, &Error{message: "Invalid query parameters"})
+	return invalidQueryParam()
+
+}
+
+func invalidQueryParam() {
+
+	return c.JSON(402, &Message{message: "Invalid query parameters"})
 
 }
