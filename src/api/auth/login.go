@@ -1,9 +1,9 @@
 package auth
 
 import (
-	"net/http"
 	"encoding/json"
-	
+	"net/http"
+
 	"github.com/labstack/echo/v4"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -16,7 +16,7 @@ func Login(c echo.Context) error {
 	err := json.NewDecoder(c.Request().Body).Decode(&json_map)
 
 	if err != nil {
-		
+
 		return err
 
 	}

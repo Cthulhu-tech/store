@@ -2,7 +2,6 @@ package auth
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 	"os"
@@ -14,45 +13,45 @@ func Vkontakte(c echo.Context) error {
 
 	code := c.QueryParam("code")
 
-	if len(code) > 0 {
+	if len(code) == 0 {
 
-		res, err := http.Get(os.Getenv("vk_get_email") + code)
-
-		if err != nil {
-
-			return err
-
-		}
-
-		body, err := ioutil.ReadAll(res.Body)
-
-		if err != nil {
-
-			return err
-
-		}
-
-		data := &VK_DATA{}
-
-		json.Unmarshal(body, &data)
-
-		if len(data.AT) == 0 || len(data.ID) == 0 || len(data.EXPIRES) == 0 || len(data.Email) == 0 {
-
-			return invalidQueryParam()
-
-		}
-
-		fmt.Println(data.AT, data.USER_ID, data.EXPIRES, data.EMAIL)
-
-		return c.Redirect(302, os.Getenv("URL_SERVER"))
+		return invalidQueryParam(c)
 
 	}
 
-	return invalidQueryParam()
+	res, err := http.Get(os.Getenv("vk_get_email") + code)
+
+	if err != nil {
+
+		return err
+
+	}
+
+	body, err := ioutil.ReadAll(res.Body)
+
+	if err != nil {
+
+		return err
+
+	}
+
+	data := &VK_DATA{}
+
+	json.Unmarshal(body, &data)
+
+	if data.AT == "" || data.USER_ID <= 0 || data.EXPIRES <= 0 || data.EMAIL == "" {
+
+		return invalidQueryParam(c)
+
+	}
+
+	smtpEmail(data.EMAIL, "confirm", c)
+
+	return c.JSON(202, &Message{message: "Please, check your email address"})
 
 }
 
-func invalidQueryParam() {
+func invalidQueryParam(c echo.Context) error {
 
 	return c.JSON(402, &Message{message: "Invalid query parameters"})
 

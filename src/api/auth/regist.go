@@ -21,12 +21,10 @@ func Regist(c echo.Context) error {
 
 	if userInfo.Login == "" || userInfo.Password == "" || userInfo.Email == "" {
 
-		return c.String(http.ErrBodyNotAllowed, &Message{message: "Invalid body parameters"})
+		return c.JSON(403, &Message{message: "Invalid body parameters"})
 
 	}
 
-	
-
-	return c.String(http.StatusOK, &Message{message: "User registered successfully"})
+	return c.JSON(http.StatusOK, &Message{message: "User registered successfully"})
 
 }
