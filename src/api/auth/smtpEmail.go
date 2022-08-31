@@ -27,7 +27,7 @@ func smtpEmail(email string, method string, c echo.Context) error {
 
 	}
 
-	smtpMail.SendMail(secret, method+" "+url, email)
+	smtpMail.SendMail(secret, method+url, email)
 
 	return nil
 

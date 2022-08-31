@@ -53,7 +53,7 @@ func SendMail(secret int, url string, emailAddress string) {
 	  <meta charset="utf-8" />
 	</head>
 	<body>` +
-		"confirmation link : " + os.Getenv("URL_SERVER") + url + "\r\n" + "<br>" +
+		"confirmation link : " + os.Getenv("URL_SERVER") + "?code=" + url + "\r\n" + "<br>" +
 		"your secret code : " + strconv.Itoa(secret) + "\r\n" + "<br>" +
 		`</body>
   	</html>`

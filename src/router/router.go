@@ -20,6 +20,7 @@ func Handler() {
 	router.GET("/regist", auth.Regist)
 
 	router.GET("/auth", auth.Vkontakte)
+	router.GET("/confirm", auth.Confirm)
 
 	check.GET("/refresh", auth.Refresh)
 	check.GET("/protected", auth.Protected)
