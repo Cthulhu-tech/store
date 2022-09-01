@@ -2,7 +2,6 @@ package smtpMail
 
 import (
 	"errors"
-	"log"
 	"net/smtp"
 	"os"
 	"strconv"
@@ -40,7 +39,7 @@ func (a *loginAuth) Next(fromServer []byte, more bool) ([]byte, error) {
 
 }
 
-func SendMail(secret int, url string, emailAddress string) {
+func SendMail(secret int, url string, emailAddress string) error {
 
 	auth := LoginAuth(os.Getenv("SMTP_EMAIL"), os.Getenv("SMTP_PASSWORD"))
 
@@ -53,7 +52,7 @@ func SendMail(secret int, url string, emailAddress string) {
 	  <meta charset="utf-8" />
 	</head>
 	<body>` +
-		"confirmation link : " + os.Getenv("URL_SERVER") + "?code=" + url + "\r\n" + "<br>" +
+		"confirmation link : " + os.Getenv("URL_SERVER_FRONT") + "?code=" + url + "\r\n" + "<br>" +
 		"your secret code : " + strconv.Itoa(secret) + "\r\n" + "<br>" +
 		`</body>
   	</html>`
@@ -64,8 +63,10 @@ func SendMail(secret int, url string, emailAddress string) {
 
 	if err != nil {
 
-		log.Println(err)
+		return err
 
 	}
+
+	return nil
 
 }
