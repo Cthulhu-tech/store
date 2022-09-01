@@ -7,10 +7,6 @@ type VK_DATA struct {
 	USER_ID int    `json:"user_id"`
 }
 
-type Message struct {
-	message string
-}
-
 type UserRegistration struct {
 	Login    string `json:"login"`
 	Password string `json:"password"`
@@ -19,4 +15,43 @@ type UserRegistration struct {
 
 type RegistrationFunc struct {
 	Value int `json:"sp_registation"`
+}
+
+type UserRegistrationConfirm struct {
+	Login    string `json:"login"`
+	Password string `json:"password"`
+	Code     string `json:"code"`
+	Secret   int    `json:"secret"`
+}
+
+type ConfirmVkFunc struct {
+	Value int `json:"sp_cofnfirm_vk"`
+}
+
+type UserConfirm struct {
+	Code   string `json:"code"`
+	Secret int    `json:"secret"`
+}
+
+type ConfirmFunc struct {
+	Value int `json:"sp_confirm"`
+}
+
+type UserLogin struct {
+	Login    string `json:"login"`
+	Mail     string `json:"email"`
+	Password string `json:"password"`
+}
+
+type UserAllData struct {
+	Id       int    `json:"id"`
+	Login    string `json:"login"`
+	Email    string `json:"eemail"`
+	Password string `json:"password"`
+	Confirm  string `json:"confirm"`
+}
+
+type MessageToken struct {
+	Message string
+	Token   string
 }
