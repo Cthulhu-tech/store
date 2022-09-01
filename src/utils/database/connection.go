@@ -15,6 +15,8 @@ func Connecting() {
 
 	database, err := sql.Open("mysql", os.Getenv("USERDB")+":"+os.Getenv("PASSWORD")+"@tcp("+os.Getenv("SERVER")+os.Getenv("PORT")+")/"+os.Getenv("DBNAME"))
 	
+    database.Ping()
+
 	if err != nil {
 
 		panic(err.Error())
