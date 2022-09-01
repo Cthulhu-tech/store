@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/Cthulhu-tech/store/src/utils/message"
 	"github.com/labstack/echo/v4"
 )
 
@@ -39,20 +40,24 @@ func Vkontakte(c echo.Context) error {
 
 	json.Unmarshal(body, &data)
 
-	if data.AT == "" || data.USER_ID <= 0 || data.EXPIRES <= 0 || data.EMAIL == "" {
+	if data.AT == "" || data.USER_ID <= 0 || data.EXPIRES <= 0 || !isEmailValid(data.EMAIL) {
 
 		return invalidQueryParam(c)
 
 	}
 
-	smtpEmail(data.EMAIL, "confirm", c)
+	defer func() {
 
-	return c.JSON(202, &Message{message: "Please, check your email address"})
+		go smtpEmail(data.EMAIL, "confirm", c)
+
+	}()
+
+	return message.JSON(c, 202, "Please, check your email address")
 
 }
 
 func invalidQueryParam(c echo.Context) error {
 
-	return c.JSON(402, &Message{message: "Invalid query parameters"})
+	return message.JSON(c, 402, "Invalid query parameters")
 
 }
