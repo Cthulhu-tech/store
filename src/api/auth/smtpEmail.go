@@ -11,11 +11,16 @@ import (
 
 func smtpEmail(email string, method string, c echo.Context) error {
 
-	secret := <-random.GetNumber(0, 9999)
-	defer close(secret)
+	secretChannel := make(chan int)
+	defer close(secretChannel)
+	urlChannel := make(chan string)
+	defer close(urlChannel)
 
-	url := <-random.RandomUrl(32)
-	defer close(url)
+	secretChannel <- random.GetNumber(0, 9999)
+	urlChannel <- random.RandomUrl(32)
+
+	url := <-urlChannel
+	secret := <-secretChannel
 
 	db := database.GetDB()
 

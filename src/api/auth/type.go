@@ -16,3 +16,7 @@ type UserRegistration struct {
 	Password string `json:"password"`
 	Email    string `json:"email"`
 }
+
+type RegistrationFunc struct {
+	Value int `json:"sp_registation"`
+}
