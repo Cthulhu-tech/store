@@ -18,9 +18,11 @@ func Handler() {
 
 	router.GET("/login", auth.Login)
 	router.GET("/regist", auth.Regist)
-
-	router.GET("/auth", auth.Vkontakte)
+	router.GET("/refresh", auth.Refresh)
 	router.GET("/confirm", auth.Confirm)
+
+	router.GET("/authVk", auth.Vkontakte)
+	router.GET("/confirmsocial", auth.ConfirmSocial)
 
 	check.GET("/refresh", auth.Refresh)
 	check.GET("/protected", auth.Protected)
