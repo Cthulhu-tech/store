@@ -2,10 +2,9 @@ package auth
 
 import (
 	"encoding/json"
-	"log"
-	"net/http"
 
 	"github.com/Cthulhu-tech/store/src/utils/database"
+	"github.com/Cthulhu-tech/store/src/utils/message"
 	"github.com/Cthulhu-tech/store/src/utils/password"
 	"github.com/labstack/echo/v4"
 )
@@ -22,9 +21,9 @@ func Regist(c echo.Context) error {
 
 	}
 
-	if userInfo.Login == "" || userInfo.Password == "" || userInfo.Email == "" {
+	if userInfo.Login == "" || userInfo.Password == "" || !isEmailValid(userInfo.Email) {
 
-		return c.JSON(403, &Message{message: "Invalid body parameters"})
+		return message.JSON(c, 403, "Need all parameters")
 
 	}
 
@@ -32,17 +31,16 @@ func Regist(c echo.Context) error {
 
 	if err != nil {
 
-		return c.JSON(500, &Message{message: "Server Error"})
+		return message.JSON(c, 500, "Server error")
 
 	}
-
 	db := database.GetDB()
 
 	rows, err := db.Query("SELECT `sp_registation`(?, ?, ?) AS `sp_registation`", userInfo.Login, hash, userInfo.Email)
 
 	if err != nil {
 
-		return c.JSON(500, &Message{message: "Server Error"})
+		return message.JSON(c, 500, "Server error")
 
 	}
 
@@ -54,7 +52,7 @@ func Regist(c echo.Context) error {
 
 		if err := rows.Scan(&registration.Value); err != nil {
 
-			log.Println(err.Error())
+			return message.JSON(c, 500, "Server error")
 
 		}
 
@@ -62,14 +60,18 @@ func Regist(c echo.Context) error {
 
 	}
 
-	smtpEmail(userInfo.Email, "confirm", c)
-
 	if value.Value == 0 {
 
-		return c.JSON(http.StatusOK, &Message{message: "Username or email already in use"})
+		return message.JSON(c, 403, "Username or email already in use")
 
 	}
 
-	return c.JSON(http.StatusOK, &Message{message: "User registered successfully"})
+	defer func() {
+
+		go smtpEmail(userInfo.Email, "confirm", c)
+
+	}()
+
+	return message.JSON(c, 200, "User registered successfully")
 
 }
