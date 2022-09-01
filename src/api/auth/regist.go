@@ -34,9 +34,12 @@ func Regist(c echo.Context) error {
 		return message.JSON(c, 500, "Server error")
 
 	}
+
 	db := database.GetDB()
 
 	rows, err := db.Query("SELECT `sp_registation`(?, ?, ?) AS `sp_registation`", userInfo.Login, hash, userInfo.Email)
+
+	defer rows.Close()
 
 	if err != nil {
 

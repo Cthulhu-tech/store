@@ -36,6 +36,8 @@ func Login(c echo.Context) error {
 
 	rows, err := db.Query("SELECT * FROM users WHERE email = ? AND login = ? AND confirm = 1", user.Mail, user.Login)
 
+	defer rows.Close()
+
 	if err != nil {
 
 		return message.JSON(c, 403, "User not found")

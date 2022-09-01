@@ -19,7 +19,9 @@ func smtpEmail(email string, method string, c echo.Context) error {
 
 	db := database.GetDB()
 
-	_, err := db.Query("CALL sp_email(?, ?, ?)", email, url, secret)
+	rows, err := db.Query("CALL sp_email(?, ?, ?)", email, url, secret)
+
+	defer rows.Close()
 
 	if err != nil {
 

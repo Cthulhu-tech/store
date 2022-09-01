@@ -30,6 +30,8 @@ func ConfirmSocial(c echo.Context) error {
 
 	rows, err := db.Query("SELECT `sp_cofnfirm_vk`(?, ?, ?, ?) AS `sp_cofnfirm_vk`", data.Login, data.Password, data.Code, data.Secret)
 
+	defer rows.Close()
+
 	if err != nil {
 
 		return invalidQueryParam(c)

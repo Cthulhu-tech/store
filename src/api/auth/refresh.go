@@ -34,6 +34,8 @@ func Refresh(c echo.Context) error {
 
 	rows, err := db.Query("SELECT * FROM users WHERE id = ? AND login = ? AND confirm = 1", value.Id, value.User)
 
+	defer rows.Close()
+
 	if err != nil {
 
 		return message.JSON(c, 500, "Server error")
@@ -76,7 +78,9 @@ func Refresh(c echo.Context) error {
 
 	}
 
-	_, err = db.Query("INSERT INTO token (user_id, jwt) VALUES (?, ?)", userInfo.Id, refresh)
+	rows, err = db.Query("INSERT INTO token (user_id, jwt) VALUES (?, ?)", userInfo.Id, refresh)
+
+	defer rows.Close()
 
 	if err != nil {
 
