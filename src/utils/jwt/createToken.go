@@ -1,4 +1,4 @@
-package jwt 
+package jwt
 
 import (
 	"fmt"
@@ -8,7 +8,7 @@ import (
 )
 
 func CreateToken(user string, id int, duration int, secret string) (string, error) {
-	
+
 	token := jwt.New(jwt.SigningMethodHS256)
 
 	claims := token.Claims.(jwt.MapClaims)
@@ -26,7 +26,6 @@ func CreateToken(user string, id int, duration int, secret string) (string, erro
 		fmt.Println(err.Error())
 
 		return "", err
-
 
 	}
 

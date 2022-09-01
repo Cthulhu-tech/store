@@ -17,7 +17,7 @@ func Regist(c echo.Context) error {
 
 	if err != nil {
 
-		return err
+		return message.JSON(c, 403, "Need all parameters")
 
 	}
 
@@ -67,14 +67,18 @@ func Regist(c echo.Context) error {
 
 		return message.JSON(c, 403, "Username or email already in use")
 
+	} else {
+
+		defer sendMail(userInfo.Email, "confirm", c)
+
+		return message.JSON(c, 200, "User registered successfully")
+
 	}
 
-	defer func() {
+}
 
-		go smtpEmail(userInfo.Email, "confirm", c)
+func sendMail(email string, typeUrl string, c echo.Context) {
 
-	}()
-
-	return message.JSON(c, 200, "User registered successfully")
+	go smtpEmail(email, typeUrl, c)
 
 }

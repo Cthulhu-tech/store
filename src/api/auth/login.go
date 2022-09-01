@@ -34,9 +34,7 @@ func Login(c echo.Context) error {
 
 	db := database.GetDB()
 
-	rows, err := db.Query("SELECT * FROM users WHERE email = ? AND login = ? AND confirm = 1", user.Mail, user.Login)
-
-	defer rows.Close()
+	rows, err := db.Query("SELECT * FROM user WHERE email = ? AND login = ? AND confirme = 1", user.Mail, user.Login)
 
 	if err != nil {
 
@@ -80,7 +78,9 @@ func Login(c echo.Context) error {
 
 	}
 
-	_, err = db.Query("INSERT INTO token (user_id, jwt) VALUES (?, ?)", userInfo.Id, refresh)
+	rows, err = db.Query("INSERT INTO token (user_id, jwt) VALUES (?, ?)", userInfo.Id, refresh)
+
+	defer rows.Close()
 
 	if err != nil {
 

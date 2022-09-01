@@ -46,9 +46,9 @@ type UserLogin struct {
 type UserAllData struct {
 	Id       int    `json:"id"`
 	Login    string `json:"login"`
-	Email    string `json:"eemail"`
+	Email    string `json:"email"`
 	Password string `json:"password"`
-	Confirm  string `json:"confirm"`
+	Confirm  bool   `json:"confirme"`
 }
 
 type MessageToken struct {
