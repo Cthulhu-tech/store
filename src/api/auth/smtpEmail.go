@@ -11,9 +11,11 @@ import (
 
 func smtpEmail(email string, method string, c echo.Context) error {
 
-	secret := random.GetNumber(0, 9999)
+	secret := <-random.GetNumber(0, 9999)
+	defer close(secret)
 
-	url := random.RandomUrl(32)
+	url := <-random.RandomUrl(32)
+	defer close(url)
 
 	db := database.GetDB()
 

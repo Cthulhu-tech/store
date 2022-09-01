@@ -1,10 +1,15 @@
 package random
 
-import "math/rand"
+import (
+	"math/rand"
+	"time"
+)
 
 var letters = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 
 func RandomUrl(n int) string {
+
+	rand.Seed(time.Now().UnixNano())
 
 	b := make([]rune, n)
 

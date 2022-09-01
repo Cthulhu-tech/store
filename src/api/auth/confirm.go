@@ -17,7 +17,7 @@ func Confirm(c echo.Context) error {
 
 	db := database.GetDB()
 
-	_, err := db.Query("", code)
+	_, err := db.Query("SELECT ", code)
 
 	if err != nil {
 
